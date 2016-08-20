@@ -15,9 +15,10 @@ Vagrant.configure("2") do |config|
         <<-eos
 cd /var/www && composer install && \
 npm install && bower install && gulp && \
-cp .env.example .env && php artisan migrate && \
-php artisan db:seed && \
-php artisan key:generate
+cp env.example .env && \
+php artisan key:generate &&\
+php artisan migrate && \
+php artisan db:seed
 eos
 
 end
