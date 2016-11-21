@@ -24,7 +24,13 @@ class HouseholdAttachmentController extends AdminController
         if(!Auth::user()->hasRole('admin') && $file->owner_user_id != Auth::user()){
             abort(403);
         }
+        $pathinfo = pathinfo($file->path);
+        switch(strtolower($pathinfo['extension'])){
+        case 'pdf': $type = 'application/pdf'; break;
+        default: $type = 'application/octet-stream';
+        }
         return response(Storage::disk('forms')->get($file->path))
-            ->header('Content-type', 'none');
+            ->header('Content-type', $type)
+            ->header('Content-Disposition', 'attachment; filename="' . explode("_", $pathinfo['basename'], 2)[1] . '"');
     }
 }
